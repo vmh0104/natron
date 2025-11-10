@@ -1,0 +1,77 @@
+# Natron Transformer Configuration
+# Multi-Task Financial Trading Model
+
+model:
+  name: "natron_v2"
+  sequence_length: 96
+  feature_dim: 100
+  d_model: 256
+  nhead: 8
+  num_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  activation: "gelu"
+
+training:
+  batch_size: 32
+  learning_rate: 1e-4
+  weight_decay: 1e-5
+  num_epochs_pretrain: 50
+  num_epochs_supervised: 100
+  num_epochs_rl: 200
+  device: "cuda"
+  num_workers: 4
+  pin_memory: true
+  
+  # Multi-task loss weights
+  loss_weights:
+    buy: 1.0
+    sell: 1.0
+    direction: 1.0
+    regime: 1.5
+    
+  # Pretraining
+  pretrain:
+    mask_probability: 0.15
+    contrastive_temperature: 0.07
+    use_contrastive: true
+    
+  # RL
+  rl:
+    algorithm: "PPO"
+    reward_alpha: 0.1  # turnover penalty
+    reward_beta: 0.05  # drawdown penalty
+    gamma: 0.99
+    clip_epsilon: 0.2
+
+data:
+  csv_path: "data_export.csv"
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  normalize: true
+  
+  # Labeling thresholds
+  labeling:
+    volume_multiplier: 1.5
+    rsi_oversold: 30
+    rsi_overbought: 70
+    price_position_threshold: 0.7  # 70% of high-low range
+    trend_threshold: 0.02  # 2%
+    adx_threshold: 25
+    atr_percentile: 90
+
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  
+socket:
+  host: "127.0.0.1"
+  port: 8888
+  buffer_size: 4096
+
+paths:
+  model_dir: "./models"
+  logs_dir: "./logs"
+  data_dir: "./data"
