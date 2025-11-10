@@ -1,0 +1,50 @@
+# Natron Transformer Configuration
+
+# Data configuration
+data:
+  sequence_length: 96
+  train_ratio: 0.8
+  val_ratio: 0.1
+  # test_ratio = 1 - train_ratio - val_ratio
+
+# Model architecture
+model:
+  input_dim: 100  # Number of features
+  d_model: 128     # Transformer dimension
+  nhead: 8         # Number of attention heads
+  num_layers: 6    # Number of transformer layers
+  dim_feedforward: 512  # Feedforward dimension
+  dropout: 0.1     # Dropout rate
+
+# Pretraining (Phase 1)
+pretrain:
+  enabled: true
+  epochs: 10
+  lr: 1e-4
+  weight_decay: 1e-5
+  mask_ratio: 0.15
+  recon_weight: 1.0
+  contrastive_weight: 0.5
+
+# Supervised fine-tuning (Phase 2)
+supervised:
+  epochs: 50
+  lr: 1e-4
+  weight_decay: 1e-5
+  freeze_encoder: false  # Whether to freeze encoder during fine-tuning
+  buy_weight: 1.0
+  sell_weight: 1.0
+  direction_weight: 1.0
+  regime_weight: 1.0
+  use_focal_loss: false
+
+# Training configuration
+training:
+  batch_size: 32
+  num_workers: 2
+
+# Server configuration
+server:
+  flask_port: 5000
+  socket_port: 8888
+  socket_host: localhost
