@@ -1,0 +1,84 @@
+# Natron Transformer Configuration
+
+# Data settings
+data:
+  csv_path: "data/data_export.csv"
+  sequence_length: 96
+  test_split: 0.2
+  validation_split: 0.1
+
+# Feature engineering
+features:
+  n_features: 100
+  normalize: true
+  normalization_method: "robust"  # robust, standard, minmax
+
+# Model architecture
+model:
+  d_model: 256
+  nhead: 8
+  num_encoder_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  activation: "gelu"
+
+# Training - Phase 1 (Pretraining)
+pretrain:
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  mask_ratio: 0.15
+  contrastive_temperature: 0.07
+  use_masked_modeling: true
+  use_contrastive: true
+  checkpoint_path: "model/natron_pretrained.pt"
+
+# Training - Phase 2 (Supervised)
+supervised:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.00005
+  weight_decay: 0.00001
+  freeze_encoder: false
+  task_weights:
+    buy: 1.0
+    sell: 1.0
+    direction: 1.5
+    regime: 1.2
+  checkpoint_path: "model/natron_supervised.pt"
+  early_stopping_patience: 15
+
+# Training - Phase 3 (Reinforcement Learning)
+reinforcement:
+  algorithm: "ppo"  # ppo, sac
+  episodes: 1000
+  learning_rate: 0.00003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_epsilon: 0.2
+  reward_weights:
+    profit: 1.0
+    turnover: 0.1
+    drawdown: 0.3
+  checkpoint_path: "model/natron_rl.pt"
+
+# Labels
+labels:
+  buy_conditions_threshold: 2
+  sell_conditions_threshold: 2
+  regime_classes: 6
+
+# API Server
+server:
+  host: "0.0.0.0"
+  port: 5000
+  socket_port: 9090
+  max_connections: 10
+  timeout: 30
+
+# Logging
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  tensorboard_dir: "logs/tensorboard"
