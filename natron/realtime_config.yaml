@@ -1,0 +1,42 @@
+# Natron Realtime Trading Configuration
+
+# Model settings
+model:
+  checkpoint_path: models/natron_v6/natron_v6.pt
+  normalization_stats: models/natron_v6/norm_stats.npy
+  n_features: 65  # Update based on actual feature count
+  d_model: 128
+  nhead: 8
+  num_layers: 6
+  dim_feedforward: 512
+  max_seq_len: 96
+  n_regime_classes: 6
+
+# Socket communication
+socket:
+  host: localhost
+  port: 8888
+  timeout: 5.0
+
+# Trading parameters
+trading:
+  entry_threshold: 0.6        # Minimum forecast confidence for entry
+  cancel_threshold: 0.3       # Cancel if confidence drops below this
+  atr_multiplier: 2.0         # ATR multiplier for entry zone calculation
+  max_positions: 1            # Maximum concurrent positions
+  lot_size: 0.01              # Default lot size
+  risk_per_trade: 0.02        # Risk 2% per trade
+
+# Risk management
+risk:
+  max_daily_loss: 0.05        # Stop trading if daily loss exceeds 5%
+  max_drawdown: 0.10          # Maximum drawdown threshold
+  position_sizing: fixed      # fixed, kelly, volatility_based
+
+# Events logging
+events_log: realtime_events.csv
+
+# Monitoring
+monitoring:
+  log_interval: 60            # Log status every N seconds
+  health_check_interval: 300   # Health check every N seconds

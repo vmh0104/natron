@@ -1,0 +1,53 @@
+# Natron Model Training Configuration
+
+# Model architecture
+model:
+  d_model: 128              # Transformer model dimension
+  nhead: 8                   # Number of attention heads
+  num_layers: 6              # Number of transformer encoder layers
+  dim_feedforward: 512      # Feedforward network dimension
+  dropout: 0.1              # Dropout rate
+  max_seq_len: 96           # Maximum sequence length (candles)
+  n_regime_classes: 6       # Number of regime classes
+
+# Optimizer settings
+optimizer:
+  type: AdamW
+  lr: 0.0001                # Learning rate
+  weight_decay: 0.00001     # Weight decay (L2 regularization)
+  beta1: 0.9                # Adam beta1
+  beta2: 0.999              # Adam beta2
+
+# Learning rate scheduler
+scheduler:
+  type: cosine               # cosine annealing
+  T_max: 50                  # Maximum iterations
+  eta_min: 0.000001         # Minimum learning rate
+
+# Loss function weights
+loss:
+  regime_weight: 1.0         # Weight for regime classification loss
+  context_weight: 0.5       # Weight for context strength loss
+  forecast_weight: 1.0       # Weight for forecast direction loss
+
+# Training settings
+training:
+  epochs: 50                 # Number of training epochs
+  batch_size: 32            # Batch size
+  use_mixed_precision: true  # Use mixed precision training (AMP)
+
+# Data settings
+data:
+  sequence_length: 96        # Input sequence length (candles)
+  forecast_horizon: 5        # Forecast horizon (candles ahead)
+  train_ratio: 0.7          # Training set ratio
+  val_ratio: 0.15           # Validation set ratio
+  # test_ratio: 0.15        # Test set ratio (remaining)
+
+# Output directory
+output_dir: models/natron_v6
+
+# Logging
+logging:
+  log_interval: 10           # Log every N batches
+  save_interval: 1          # Save checkpoint every N epochs
