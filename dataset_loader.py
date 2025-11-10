@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import torch
 from pandas import DataFrame
+from pandas.api.types import is_datetime64_any_dtype
 from torch.utils.data import DataLoader, Dataset
 
 from feature_engineering import FeatureConfig, FeatureEngineer
@@ -211,17 +212,35 @@ class NatronDataModule:
             df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
             missing = df["time"].isna().sum()
             if missing:
-                logger.warning("Detected %d rows with non-parsable 'time'; assigning synthetic timestamps.", missing)
+                logger.warning(
+                    "Detected %d rows with non-parsable 'time'; assigning synthetic timestamps.",
+                    missing,
+                )
                 base_time = pd.Timestamp.utcnow().normalize()
                 df.loc[df["time"].isna(), "time"] = pd.date_range(
-                    start=base_time, periods=missing, freq="T"
+                    start=base_time, periods=missing, freq="min"
                 ).tz_localize("UTC")
-            df = df.sort_values("time").reset_index(drop=True)
         else:
             logger.warning("Column 'time' missing in CSV; generating synthetic timeline.")
             base_time = pd.Timestamp.utcnow().normalize()
-            df = df.reset_index(drop=True)
-            df["time"] = pd.date_range(start=base_time, periods=len(df), freq="T", tz="UTC")
+            df["time"] = pd.date_range(start=base_time, periods=len(df), freq="min", tz="UTC")
+
+        if not is_datetime64_any_dtype(df["time"]):
+            df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
+
+        if df["time"].isna().any():
+            missing = df["time"].isna().sum()
+            base_time = pd.Timestamp.utcnow().normalize()
+            df.loc[df["time"].isna(), "time"] = pd.date_range(
+                start=base_time, periods=missing, freq="min", tz="UTC"
+            )
+
+        if getattr(df["time"].dt, "tz", None) is None:
+            df["time"] = df["time"].dt.tz_localize("UTC")
+        else:
+            df["time"] = df["time"].dt.tz_convert("UTC")
+
+        df = df.sort_values("time").reset_index(drop=True)
         return df
 
     def _split(
