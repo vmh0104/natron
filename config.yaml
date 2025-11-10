@@ -1,0 +1,74 @@
+# Natron Transformer Configuration
+
+# Model Architecture
+model:
+  input_dim: 100
+  d_model: 256
+  nhead: 8
+  num_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  max_seq_len: 96
+
+# Training Configuration
+training:
+  sequence_length: 96
+  batch_size: 32
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  epochs_pretrain: 50
+  epochs_supervised: 100
+  train_ratio: 0.8
+  val_ratio: 0.1
+
+# Loss Weights
+loss_weights:
+  buy: 1.0
+  sell: 1.0
+  direction: 1.0
+  regime: 1.0
+
+# Data Configuration
+data:
+  data_path: "data_export.csv"
+  lookahead_periods: 5
+
+# Pretraining
+pretraining:
+  method: "masked"  # "masked" or "contrastive"
+  mask_ratio: 0.15
+  contrastive_temperature: 0.07
+
+# Reinforcement Learning
+rl:
+  enabled: false
+  lr: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_epsilon: 0.2
+  value_coef: 0.5
+  entropy_coef: 0.01
+  rollout_steps: 2048
+  update_epochs: 4
+  batch_size: 64
+
+# API Server
+api:
+  host: "0.0.0.0"
+  port: 5000
+  model_path: "./checkpoints/natron_v2.pt"
+
+# Socket Server (MQL5)
+socket:
+  host: "localhost"
+  port: 8888
+  model_path: "./checkpoints/natron_v2.pt"
+  timeout: 5
+
+# Device
+device: "cuda"  # "cuda" or "cpu"
+
+# Paths
+paths:
+  checkpoints: "./checkpoints"
+  logs: "./logs"
