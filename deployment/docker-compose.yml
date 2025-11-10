@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  natron-server:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    image: natron-v2:latest
+    container_name: natron-server
+    restart: unless-stopped
+    
+    # GPU support (requires nvidia-docker)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    
+    # Environment variables
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - CONFIG_PATH=/workspace/config/config.yaml
+      - MODEL_PATH=/workspace/model/natron_v2.pt
+    
+    # Volume mounts
+    volumes:
+      - ../model:/workspace/model
+      - ../logs:/workspace/logs
+      - ../data:/workspace/data
+      - ../config:/workspace/config
+    
+    # Ports
+    ports:
+      - "5000:5000"  # Flask API
+      - "9090:9090"  # Socket server
+    
+    # Command (socket server by default)
+    command: python src/inference/socket_server.py
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s = socket.socket(); s.connect(('localhost', 9090)); s.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Logging
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Tensorboard for monitoring training
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: natron-tensorboard
+    restart: unless-stopped
+    
+    volumes:
+      - ../logs:/logs
+    
+    ports:
+      - "6006:6006"
+    
+    command: tensorboard --logdir=/logs --host=0.0.0.0
