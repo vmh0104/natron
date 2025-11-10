@@ -1,0 +1,117 @@
+# Natron Transformer - Configuration File
+# Multi-Task Financial Trading Model
+
+# Data Configuration
+data:
+  csv_path: "data/data_export.csv"
+  sequence_length: 96
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  feature_count: 100
+  
+# Model Architecture
+model:
+  d_model: 256              # Transformer embedding dimension
+  nhead: 8                  # Number of attention heads
+  num_encoder_layers: 6     # Transformer encoder layers
+  dim_feedforward: 1024     # FFN dimension
+  dropout: 0.1
+  activation: "gelu"
+  
+  # Task-specific heads
+  buy_head_dims: [128, 64]
+  sell_head_dims: [128, 64]
+  direction_head_dims: [128, 64]
+  regime_head_dims: [128, 64]
+  
+# Training - Phase 1 (Pretraining)
+pretrain:
+  epochs: 50
+  batch_size: 64
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  mask_ratio: 0.15          # Percentage of tokens to mask
+  contrastive_temp: 0.07    # Temperature for contrastive loss
+  loss_weights:
+    reconstruction: 0.6
+    contrastive: 0.4
+  checkpoint_dir: "models/pretrain"
+  
+# Training - Phase 2 (Supervised)
+supervised:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.00005
+  weight_decay: 0.00001
+  freeze_encoder: false     # Freeze pretrained encoder
+  gradient_clip: 1.0
+  
+  # Multi-task loss weights
+  loss_weights:
+    buy: 1.0
+    sell: 1.0
+    direction: 0.8
+    regime: 0.6
+    
+  checkpoint_dir: "models/supervised"
+  early_stopping_patience: 15
+  
+# Training - Phase 3 (Reinforcement Learning)
+reinforcement:
+  algorithm: "PPO"          # PPO or SAC
+  episodes: 1000
+  gamma: 0.99
+  learning_rate: 0.00003
+  
+  # Reward function
+  reward_weights:
+    profit: 1.0
+    turnover_penalty: 0.1
+    drawdown_penalty: 0.2
+    
+  checkpoint_dir: "models/rl"
+  
+# Label Generation
+labels:
+  # Buy conditions (need ≥2 to trigger)
+  buy_min_conditions: 2
+  
+  # Sell conditions (need ≥2 to trigger)
+  sell_min_conditions: 2
+  
+  # Regime thresholds
+  regime:
+    bull_strong_trend: 0.02    # +2%
+    bull_weak_trend: 0.0
+    bear_weak_trend: -0.02
+    bear_strong_trend: -0.02
+    adx_threshold: 25
+    volatility_percentile: 90
+    
+# API Server
+api:
+  host: "0.0.0.0"
+  port: 8888
+  model_path: "models/natron_v2.pt"
+  log_predictions: true
+  
+# MQL5 Integration
+mql5:
+  socket_port: 9999
+  buffer_size: 4096
+  timeout: 5
+  
+# Hardware
+hardware:
+  device: "cuda"            # cuda, cpu
+  num_workers: 4
+  pin_memory: true
+  mixed_precision: true     # Use AMP for faster training
+  
+# Logging
+logging:
+  level: "INFO"
+  save_dir: "logs"
+  tensorboard: true
+  wandb_project: null       # Set to project name to enable W&B
