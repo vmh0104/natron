@@ -1,0 +1,90 @@
+# Natron Transformer Configuration File
+
+# Model Configuration
+model:
+  d_model: 256
+  nhead: 8
+  num_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  sequence_length: 96
+
+# Training Configuration
+training:
+  batch_size: 32
+  learning_rate: 1e-4
+  weight_decay: 1e-5
+  epochs_pretrain: 50
+  epochs_supervised: 100
+  epochs_rl: 100
+  
+  # Loss weights
+  loss_weights:
+    buy: 1.0
+    sell: 1.0
+    direction: 1.0
+    regime: 1.0
+  
+  # Pretraining
+  pretrain:
+    reconstruction_weight: 1.0
+    contrastive_weight: 0.5
+    temperature: 0.07
+    mask_ratio: 0.15
+  
+  # Reinforcement Learning
+  rl:
+    gamma: 0.99
+    lam: 0.95
+    clip_epsilon: 0.2
+    learning_rate: 3e-5
+
+# Data Configuration
+data:
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+  
+# API Server Configuration
+api:
+  host: "0.0.0.0"
+  port: 5000
+  model_path: "./models/natron_v2.pt"
+
+# Socket Server Configuration (MQL5)
+socket:
+  host: "localhost"
+  port: 8888
+  model_path: "./models/natron_v2.pt"
+  sequence_length: 96
+
+# MQL5 EA Configuration
+mql5:
+  server_host: "localhost"
+  server_port: 8888
+  lot_size: 0.01
+  magic_number: 123456
+  stop_loss: 50
+  take_profit: 100
+  buy_threshold: 0.6
+  sell_threshold: 0.6
+  update_interval: 60
+  enable_trading: true
+  use_regime_filter: true
+  allowed_regimes: ["BULL_STRONG", "BULL_WEAK"]
+
+# Feature Engineering
+features:
+  lookback_periods: [5, 10, 20, 50, 100, 200]
+
+# Logging
+logging:
+  level: "INFO"
+  file: "natron.log"
+  socket_log: "natron_socket.log"
+
+# Paths
+paths:
+  data: "./data_export.csv"
+  models: "./models"
+  logs: "./logs"
