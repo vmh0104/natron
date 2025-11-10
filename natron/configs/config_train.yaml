@@ -1,0 +1,40 @@
+# Natron Training Configuration
+# Multi-head Transformer Model Training
+
+data:
+  processed_path: "data/processed/processed_data.csv"
+  raw_path: "data/raw/market_data.csv"
+
+model:
+  d_model: 256
+  nhead: 8
+  num_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  seq_len: 96
+  num_regime_classes: 6
+
+training:
+  batch_size: 32
+  num_epochs: 100
+  train_ratio: 0.7
+  val_ratio: 0.15
+  num_workers: 4
+  
+  optimizer:
+    lr: 0.0001
+    weight_decay: 0.01
+  
+  scheduler:
+    T_max: 100
+    eta_min: 0.00001
+  
+  loss_weights:
+    regime: 1.0
+    context: 0.5
+    forecast: 1.0
+
+paths:
+  model_dir: "models"
+  log_dir: "logs/training"
+  model_name: "natron_v6.pt"

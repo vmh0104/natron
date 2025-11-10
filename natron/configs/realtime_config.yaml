@@ -1,0 +1,33 @@
+# Natron Realtime Trading Configuration
+
+model:
+  path: "models/natron_v6.pt"
+  seq_len: 96
+
+data:
+  processed_path: "data/processed/processed_data.csv"
+
+socket:
+  host: "localhost"
+  port: 8888
+
+trading:
+  symbol: "EURUSD"
+  lot_size: 0.01
+  
+  # Entry conditions
+  min_confidence: 0.65
+  min_context_strength: 0.5
+  
+  # Risk management
+  entry_offset: 0.5  # ATR multiples
+  stop_loss_atr_multiple: 2.0
+  take_profit_atr_multiple: 3.0
+  max_deviation_atr_multiple: 3.0
+  
+  # Trailing stop
+  use_trailing_stop: true
+  trailing_stop_atr_multiple: 2.0
+
+paths:
+  event_log: "logs/realtime_events.csv"

@@ -1,0 +1,27 @@
+2024-01-15 10:00:00 - INFO - Loading data from data/processed/processed_data.csv
+2024-01-15 10:00:05 - INFO - Found 67 features
+2024-01-15 10:00:05 - INFO - Data split: Train=7000, Val=1500, Test=1500
+2024-01-15 10:00:10 - INFO - Building model...
+2024-01-15 10:00:10 - INFO - Model parameters: 2,847,392
+2024-01-15 10:00:15 - INFO - Starting training...
+Epoch 1/100: 100%|████████████| 219/219 [02:15<00:00,  1.62it/s, loss=2.3456, regime=0.8234, context=0.1234, forecast=1.3988]
+Epoch 1/100 | Train Loss: 2.3456 | Val Loss: 2.1234 | Regime Acc: 0.4523 | Forecast Acc: 0.5234 | LR: 0.000100
+Epoch 2/100: 100%|████████████| 219/219 [02:14<00:00,  1.63it/s, loss=1.9876, regime=0.7123, context=0.1123, forecast=1.1630]
+Epoch 2/100 | Train Loss: 1.9876 | Val Loss: 1.8765 | Regime Acc: 0.5234 | Forecast Acc: 0.5678 | LR: 0.000099
+Epoch 3/100: 100%|████████████| 219/219 [02:13<00:00,  1.64it/s, loss=1.7234, regime=0.6234, context=0.1023, forecast=0.9977]
+Epoch 3/100 | Train Loss: 1.7234 | Val Loss: 1.6543 | Regime Acc: 0.5789 | Forecast Acc: 0.6012 | LR: 0.000098
+...
+Epoch 25/100: 100%|████████████| 219/219 [02:12<00:00,  1.65it/s, loss=0.9123, regime=0.3456, context=0.0456, forecast=0.5211]
+Epoch 25/100 | Train Loss: 0.9123 | Val Loss: 0.9456 | Regime Acc: 0.6789 | Forecast Acc: 0.6456 | LR: 0.000075
+...
+Epoch 50/100: 100%|████████████| 219/219 [02:11<00:00,  1.66it/s, loss=0.8234, regime=0.3123, context=0.0345, forecast=0.4766]
+Epoch 50/100 | Train Loss: 0.8234 | Val Loss: 0.9123 | Regime Acc: 0.7234 | Forecast Acc: 0.6789 | LR: 0.000050
+...
+Epoch 75/100: 100%|████████████| 219/219 [02:10<00:00,  1.67it/s, loss=0.7456, regime=0.2890, context=0.0289, forecast=0.4277]
+Epoch 75/100 | Train Loss: 0.7456 | Val Loss: 0.8567 | Regime Acc: 0.7567 | Forecast Acc: 0.7012 | LR: 0.000025
+...
+Epoch 100/100: 100%|████████████| 219/219 [02:09<00:00,  1.68it/s, loss=0.6543, regime=0.2567, context=0.0234, forecast=0.3742]
+Epoch 100/100 | Train Loss: 0.6543 | Val Loss: 0.7890 | Regime Acc: 0.7890 | Forecast Acc: 0.7234 | LR: 0.000010
+2024-01-15 12:30:00 - INFO - Saved best model to models/natron_v6.pt
+2024-01-15 12:30:00 - INFO - Training complete!
+2024-01-15 12:30:00 - INFO - Best validation loss: 0.7890

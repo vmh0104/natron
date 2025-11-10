@@ -1,0 +1,72 @@
+# Example Natron Configuration
+# This demonstrates a complete configuration setup
+
+# Data paths
+data:
+  raw_path: "data/raw/market_data.csv"
+  processed_path: "data/processed/processed_data.csv"
+
+# Model architecture
+model:
+  d_model: 256              # Transformer dimension
+  nhead: 8                  # Number of attention heads
+  num_layers: 6             # Number of transformer layers
+  dim_feedforward: 1024     # Feedforward dimension
+  dropout: 0.1              # Dropout rate
+  seq_len: 96               # Input sequence length (candles)
+  num_regime_classes: 6     # Number of regime classes
+
+# Training configuration
+training:
+  batch_size: 32            # Batch size
+  num_epochs: 100           # Number of training epochs
+  train_ratio: 0.7          # Training set ratio
+  val_ratio: 0.15           # Validation set ratio
+  num_workers: 4            # DataLoader workers
+  
+  # Optimizer settings
+  optimizer:
+    lr: 0.0001              # Learning rate
+    weight_decay: 0.01      # Weight decay
+  
+  # Learning rate scheduler
+  scheduler:
+    T_max: 100              # Maximum iterations
+    eta_min: 0.00001        # Minimum learning rate
+  
+  # Loss function weights
+  loss_weights:
+    regime: 1.0             # Regime classification weight
+    context: 0.5            # Context strength weight
+    forecast: 1.0           # Forecast direction weight
+
+# Realtime trading configuration
+trading:
+  symbol: "EURUSD"          # Trading symbol
+  lot_size: 0.01            # Position size
+  
+  # Entry conditions
+  min_confidence: 0.65      # Minimum forecast confidence
+  min_context_strength: 0.5 # Minimum context strength
+  
+  # Risk management (ATR multiples)
+  entry_offset: 0.5         # Entry price offset
+  stop_loss_atr_multiple: 2.0
+  take_profit_atr_multiple: 3.0
+  max_deviation_atr_multiple: 3.0
+  
+  # Trailing stop
+  use_trailing_stop: true
+  trailing_stop_atr_multiple: 2.0
+
+# Socket communication
+socket:
+  host: "localhost"
+  port: 8888
+
+# File paths
+paths:
+  model_dir: "models"
+  log_dir: "logs/training"
+  model_name: "natron_v6.pt"
+  event_log: "logs/realtime_events.csv"

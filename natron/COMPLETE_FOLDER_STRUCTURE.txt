@@ -1,0 +1,130 @@
+Natron End-to-End AI Trading System - Complete Folder Structure
+================================================================
+
+natron/
+│
+├── 📁 data/
+│   ├── raw/                          # Raw market data CSV files
+│   └── processed/                    # Processed data ready for ML
+│
+├── 📁 models/                        # Trained model checkpoints
+│
+├── 📁 configs/                       # YAML configuration files
+│   ├── config_train.yaml            # Training configuration
+│   ├── realtime_config.yaml         # Realtime trading config
+│   └── adaptive_config.yaml         # Auto-adapted config
+│
+├── 📁 logs/                          # Logs and outputs
+│   ├── training/                    # Training logs
+│   ├── evaluation/                   # Evaluation results
+│   └── realtime_events.csv          # Trading events log
+│
+├── 📁 src/                           # Source code
+│   ├── __init__.py
+│   │
+│   ├── 📁 data_pipeline/             # ⚙️ PHASE 1 – DATA PIPELINE
+│   │   ├── __init__.py
+│   │   ├── data_pipeline.py          # Main pipeline orchestrator
+│   │   ├── feature_engineering.py   # 50-70 feature computation
+│   │   └── regime_labeler.py        # 6-class regime labeling
+│   │
+│   ├── 📁 training/                  # 🧩 PHASE 2 – MODEL TRAINING
+│   │   ├── __init__.py
+│   │   ├── train_model.py           # Training script
+│   │   ├── model_natron.py          # Multi-head transformer
+│   │   └── dataset_loader.py       # PyTorch Dataset/DataLoader
+│   │
+│   ├── 📁 evaluation/                # 🧠 PHASE 3 – EVALUATION
+│   │   ├── __init__.py
+│   │   ├── evaluate_model.py        # Model evaluation
+│   │   └── plot_regime_distribution.py  # Visualizations
+│   │
+│   ├── 📁 realtime/                   # ⚡ PHASE 4 – REALTIME ENGINE
+│   │   ├── __init__.py
+│   │   ├── natron_server_v5.py      # Python trading server
+│   │   ├── realtime_socket.py       # Socket communication
+│   │   └── natron_ea.mq5            # MQL5 Expert Advisor
+│   │
+│   ├── 📁 feedback/                  # 🔁 PHASE 5 – FEEDBACK LEARNING
+│   │   ├── __init__.py
+│   │   ├── auto_feedback_engine.py   # Adaptive learning
+│   │   └── log_analyzer.py          # Log analysis
+│   │
+│   └── 📁 deployment/                # 🧩 PHASE 6 – DEPLOYMENT
+│       ├── __init__.py
+│       └── monitor_natron.py        # Monitoring script
+│
+├── 📁 scripts/
+│   └── start_natron.sh               # Startup script
+│
+├── 📁 tests/                         # Unit tests (optional)
+│
+├── 📁 docs/                          # Additional documentation
+│
+├── 📄 Dockerfile                     # Docker container
+├── 📄 requirements.txt               # Python dependencies
+├── 📄 README_Natron_EndToEnd.md      # Main documentation
+├── 📄 PROJECT_STRUCTURE.md           # Project structure details
+├── 📄 QUICKSTART.md                  # Quick start guide
+├── 📄 COMPLETE_FOLDER_STRUCTURE.txt  # This file
+├── 📄 example_training_log.txt       # Example training output
+└── 📄 example_config.yaml            # Example configuration
+
+================================================================
+FILE COUNT SUMMARY
+================================================================
+
+Python Modules:     20 files
+Configuration:       4 YAML files
+Documentation:       5 Markdown files
+Scripts:             1 shell script
+MQL5:                1 Expert Advisor
+Docker:              1 Dockerfile
+Requirements:        1 requirements.txt
+
+Total: ~32 core files
+
+================================================================
+KEY DELIVERABLES BY PHASE
+================================================================
+
+PHASE 1 – DATA PIPELINE:
+  ✓ data_pipeline.py
+  ✓ feature_engineering.py
+  ✓ regime_labeler.py
+  → Output: processed_data.csv
+
+PHASE 2 – MODEL TRAINING:
+  ✓ train_model.py
+  ✓ dataset_loader.py
+  ✓ model_natron.py
+  ✓ config_train.yaml
+  → Output: natron_v6.pt
+
+PHASE 3 – EVALUATION & ANALYSIS:
+  ✓ evaluate_model.py
+  ✓ plot_regime_distribution.py
+  → Output: metrics_report.json, natron_predictions.csv
+
+PHASE 4 – REALTIME EXECUTION ENGINE:
+  ✓ natron_server_v5.py
+  ✓ realtime_socket.py
+  ✓ natron_ea.mq5
+  ✓ realtime_config.yaml
+  → Output: realtime_events.csv
+
+PHASE 5 – FEEDBACK LEARNING:
+  ✓ auto_feedback_engine.py
+  ✓ log_analyzer.py
+  ✓ adaptive_config.yaml
+  → Output: adaptive_config.yaml, learning_curve.json
+
+PHASE 6 – DEPLOYMENT:
+  ✓ Dockerfile
+  ✓ start_natron.sh
+  ✓ monitor_natron.py
+  → Output: Docker image, monitoring logs
+
+================================================================
+NATRON V1.0 – GALAXY-CLASS
+================================================================
