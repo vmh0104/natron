@@ -208,10 +208,20 @@ class NatronDataModule:
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
         df = pd.read_csv(csv_path)
         if "time" in df.columns:
-            df["time"] = pd.to_datetime(df["time"], utc=True)
+            df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
+            missing = df["time"].isna().sum()
+            if missing:
+                logger.warning("Detected %d rows with non-parsable 'time'; assigning synthetic timestamps.", missing)
+                base_time = pd.Timestamp.utcnow().normalize()
+                df.loc[df["time"].isna(), "time"] = pd.date_range(
+                    start=base_time, periods=missing, freq="T"
+                ).tz_localize("UTC")
             df = df.sort_values("time").reset_index(drop=True)
         else:
+            logger.warning("Column 'time' missing in CSV; generating synthetic timeline.")
+            base_time = pd.Timestamp.utcnow().normalize()
             df = df.reset_index(drop=True)
+            df["time"] = pd.date_range(start=base_time, periods=len(df), freq="T", tz="UTC")
         return df
 
     def _split(
