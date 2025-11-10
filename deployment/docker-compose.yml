@@ -1,0 +1,93 @@
+# Natron Transformer - Docker Compose
+# Multi-service orchestration for complete system
+
+version: '3.8'
+
+services:
+  # Training service
+  natron-train:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: natron-train
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ../data:/workspace/data
+      - ../models:/workspace/models
+      - ../checkpoints:/workspace/checkpoints
+      - ../logs:/workspace/logs
+      - ../cache:/workspace/cache
+    command: python3 src/train_natron.py --config config.yaml --phase all
+    networks:
+      - natron-network
+  
+  # Flask API service
+  natron-api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: natron-api
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ../data:/workspace/data
+      - ../models:/workspace/models
+      - ../config.yaml:/workspace/config.yaml
+    ports:
+      - "5000:5000"
+    command: python3 api/api_server.py --config config.yaml
+    depends_on:
+      - natron-train
+    networks:
+      - natron-network
+    restart: unless-stopped
+  
+  # Socket server service
+  natron-socket:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: natron-socket
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ../data:/workspace/data
+      - ../models:/workspace/models
+      - ../config.yaml:/workspace/config.yaml
+    ports:
+      - "9090:9090"
+    command: python3 api/socket_server.py --config config.yaml
+    depends_on:
+      - natron-train
+    networks:
+      - natron-network
+    restart: unless-stopped
+  
+  # TensorBoard service
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: natron-tensorboard
+    volumes:
+      - ../runs:/workspace/runs
+    ports:
+      - "6006:6006"
+    command: tensorboard --logdir=/workspace/runs --host=0.0.0.0 --port=6006
+    networks:
+      - natron-network
+    restart: unless-stopped
+
+networks:
+  natron-network:
+    driver: bridge
+
+volumes:
+  data:
+  models:
+  checkpoints:
+  logs:
+  cache:
+  runs:

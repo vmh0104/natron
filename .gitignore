@@ -1,0 +1,65 @@
+# Natron Transformer - Git Ignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Data and models
+data/*.csv
+data/*.parquet
+models/*.pt
+models/*.pth
+checkpoints/
+cache/
+
+# Logs
+logs/
+*.log
+runs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (if contains sensitive info)
+# config.yaml
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,174 @@
+# Natron Transformer - Configuration File
+# Multi-Task Financial Trading Model
+
+# Data Configuration
+data:
+  csv_path: "data_export.csv"
+  time_col: "time"
+  ohlcv_cols: ["open", "high", "low", "close", "volume"]
+  sequence_length: 96
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+
+# Feature Engineering
+features:
+  total_count: 100
+  groups:
+    moving_average: 13
+    momentum: 13
+    volatility: 15
+    volume: 9
+    price_pattern: 8
+    returns: 8
+    trend_strength: 6
+    statistical: 6
+    support_resistance: 4
+    smart_money: 6
+    market_profile: 10
+
+# Model Architecture
+model:
+  input_dim: 100
+  d_model: 256
+  nhead: 8
+  num_encoder_layers: 6
+  dim_feedforward: 1024
+  dropout: 0.1
+  max_seq_length: 96
+  
+  # Task heads
+  tasks:
+    buy: 1  # sigmoid
+    sell: 1  # sigmoid
+    direction: 2  # softmax
+    regime: 6  # softmax
+
+# Training Configuration
+training:
+  # Phase 1: Pretraining
+  pretrain:
+    enabled: true
+    epochs: 50
+    batch_size: 256
+    learning_rate: 1.0e-4
+    weight_decay: 1.0e-5
+    mask_ratio: 0.15
+    contrastive_temperature: 0.07
+    contrastive_weight: 0.5
+    
+  # Phase 2: Supervised
+  supervised:
+    epochs: 100
+    batch_size: 128
+    learning_rate: 5.0e-5
+    weight_decay: 1.0e-5
+    freeze_encoder: false
+    
+    # Multi-task loss weights
+    loss_weights:
+      buy: 1.0
+      sell: 1.0
+      direction: 1.5
+      regime: 2.0
+    
+    # Class weights for imbalanced data
+    class_weights:
+      direction: [1.0, 1.2]  # [down, up]
+      regime: [1.0, 1.0, 0.8, 1.0, 1.0, 1.5]  # 6 classes
+  
+  # Phase 3: Reinforcement Learning
+  reinforcement:
+    enabled: false
+    algorithm: "PPO"
+    episodes: 1000
+    steps_per_episode: 500
+    gamma: 0.99
+    gae_lambda: 0.95
+    clip_epsilon: 0.2
+    value_coef: 0.5
+    entropy_coef: 0.01
+    
+    # Reward function
+    reward:
+      alpha_turnover: 0.01
+      beta_drawdown: 0.05
+      
+  # Optimizer & Scheduler
+  optimizer:
+    type: "AdamW"
+    betas: [0.9, 0.999]
+    
+  scheduler:
+    type: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 5
+    min_lr: 1.0e-7
+
+# Labeling Rules
+labeling:
+  # Buy signal conditions (≥2 must be true)
+  buy:
+    ma_alignment: true  # close > MA20 > MA50
+    rsi_bullish: true   # RSI > 50 or from oversold
+    bb_position: true   # close > BB mid, MA20 slope > 0
+    volume_spike: true  # volume > 1.5 × rolling20
+    price_near_high: true  # close ≥ 70% of range
+    macd_positive: true    # MACD hist > 0 and increasing
+    min_conditions: 2
+    
+  # Sell signal conditions
+  sell:
+    ma_alignment: true  # close < MA20 < MA50
+    rsi_bearish: true   # RSI < 50 or from overbought
+    bb_position: true   # close < BB mid, MA20 slope < 0
+    volume_spike: true  # volume > 1.5 × rolling20
+    price_near_low: true   # close ≤ 30% of range
+    macd_negative: true    # MACD hist < 0 and decreasing
+    min_conditions: 2
+    
+  # Market regime classification
+  regime:
+    bull_strong_trend: 2.0  # > +2%
+    bear_strong_trend: -2.0  # < -2%
+    adx_threshold: 25
+    volatility_percentile: 90
+
+# Inference Configuration
+inference:
+  device: "cuda"
+  batch_size: 32
+  confidence_threshold: 0.6
+  model_path: "models/natron_v2.pt"
+  checkpoint_dir: "checkpoints"
+
+# API Server Configuration
+api:
+  host: "0.0.0.0"
+  port: 5000
+  max_workers: 4
+  timeout: 30
+  
+# Socket Server Configuration (MQL5 Integration)
+socket:
+  host: "0.0.0.0"
+  port: 9090
+  max_connections: 10
+  buffer_size: 4096
+  heartbeat_interval: 30
+
+# Logging & Monitoring
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/natron.log"
+  tensorboard_dir: "runs"
+
+# Paths
+paths:
+  data_dir: "data"
+  model_dir: "models"
+  checkpoint_dir: "checkpoints"
+  logs_dir: "logs"
+  cache_dir: "cache"
