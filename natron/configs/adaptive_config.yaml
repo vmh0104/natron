@@ -1,0 +1,56 @@
+# Natron Adaptive Learning Configuration
+
+# Feedback Learning Parameters
+feedback:
+  enabled: true
+  learning_rate: 0.01  # How fast to adapt
+  min_samples: 50  # Minimum trades before adaptation
+  update_frequency: "daily"  # daily, weekly, or after N trades
+  
+  # Performance Metrics
+  metrics:
+    - "win_rate"
+    - "profit_factor"
+    - "sharpe_ratio"
+    - "max_drawdown"
+
+# Adaptive Thresholds
+adaptive_thresholds:
+  confidence_scaling:
+    enabled: true
+    min_confidence: 0.5
+    max_confidence: 0.9
+    adjustment_rate: 0.05  # How much to adjust per update
+    
+  entry_threshold:
+    base_threshold: 0.65
+    min_threshold: 0.55
+    max_threshold: 0.75
+    adjustment_rate: 0.02
+
+# Weight Adjustment
+weight_adjustment:
+  regime_weight:
+    base: 1.0
+    adjustment_range: [0.8, 1.2]
+    
+  context_weight:
+    base: 0.5
+    adjustment_range: [0.3, 0.7]
+    
+  forecast_weight:
+    base: 1.5
+    adjustment_range: [1.2, 1.8]
+
+# Calibration
+calibration:
+  enabled: true
+  method: "platt_scaling"  # platt_scaling or isotonic
+  recalibrate_frequency: "weekly"
+  calibration_window: 100  # Number of recent predictions
+
+# Learning Curve
+learning_curve:
+  save_path: "logs/learning_curve.json"
+  track_metrics: true
+  plot_enabled: true

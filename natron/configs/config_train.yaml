@@ -1,0 +1,92 @@
+# Natron Model Training Configuration
+# Multi-Head Transformer Training Parameters
+
+# Data Configuration
+data:
+  input_file: "data/raw_data.csv"
+  processed_file: "data/processed_data.csv"
+  sequence_length: 96  # Number of candles per sequence
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+
+# Feature Engineering
+features:
+  indicators:
+    - ATR
+    - EMA_20
+    - EMA_50
+    - EMA_200
+    - RSI
+    - MACD
+    - MACD_signal
+    - MACD_hist
+    - BB_upper
+    - BB_middle
+    - BB_lower
+    - BB_width
+    - body_pct
+    - wick_ratio
+    - volatility_regime
+  total_features: 70  # Including derived features
+
+# Model Architecture
+model:
+  name: "NatronTransformer"
+  d_model: 256  # Embedding dimension
+  nhead: 8  # Number of attention heads
+  num_layers: 6  # Number of transformer encoder layers
+  dim_feedforward: 1024  # Feedforward network dimension
+  dropout: 0.1
+  activation: "gelu"
+  
+  # Multi-head outputs
+  regime_classes: 6  # BULL_STRONG, BULL_WEAK, BEAR_STRONG, BEAR_WEAK, RANGE, VOLATILE
+  context_output_dim: 1  # Single value for context strength
+  forecast_classes: 2  # UP, DOWN
+
+# Training Configuration
+training:
+  epochs: 100
+  early_stopping_patience: 10
+  gradient_clip: 1.0
+  mixed_precision: true
+  
+  # Loss weights
+  loss_weights:
+    regime: 1.0
+    context: 0.5
+    forecast: 1.5
+  
+  # Optimizer
+  optimizer: "AdamW"
+  learning_rate: 0.0001
+  weight_decay: 0.01
+  
+  # Learning Rate Scheduler
+  scheduler: "cosine"
+  warmup_epochs: 5
+  min_lr: 0.00001
+
+# Hardware
+hardware:
+  device: "cuda"  # cuda or cpu
+  mixed_precision: true
+  compile_model: false  # torch.compile (PyTorch 2.0+)
+
+# Output
+output:
+  model_dir: "models"
+  model_name: "natron_v6.pt"
+  log_dir: "logs"
+  tensorboard: true
+
+# Regime Labeling Parameters
+regime:
+  trend_window: 20
+  atr_percentile_window: 50
+  breakout_threshold: 0.02  # 2% breakout threshold
+  volatility_threshold: 0.75  # 75th percentile for VOLATILE

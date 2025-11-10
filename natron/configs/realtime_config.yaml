@@ -1,0 +1,62 @@
+# Natron Realtime Trading Configuration
+
+# MetaTrader Connection
+metatrader:
+  path: "C:/Program Files/MetaTrader 5/terminal64.exe"
+  login: 0  # Set your MT5 login
+  password: ""  # Set your MT5 password
+  server: ""  # Set your broker server
+  timeout: 10000  # Connection timeout in ms
+  symbol: "EURUSD"
+  timeframe: "M15"  # M1, M5, M15, M30, H1, H4, D1
+
+# Trading Parameters
+trading:
+  # Entry Logic
+  entry_confidence_threshold: 0.65  # Minimum confidence for entry
+  regime_filter: ["BULL_STRONG", "BEAR_STRONG"]  # Only trade in these regimes
+  
+  # Position Sizing
+  risk_per_trade: 0.02  # 2% risk per trade
+  max_position_size: 1.0  # Maximum lot size
+  
+  # Stop Loss & Take Profit
+  stop_loss_atr_multiplier: 2.0  # Stop loss = ATR * multiplier
+  take_profit_atr_multiplier: 3.0  # Take profit = ATR * multiplier
+  trailing_stop_atr_multiplier: 1.5  # Trailing stop activation
+  
+  # Entry Zones
+  limit_entry_enabled: true
+  limit_entry_offset_pips: 5  # Pips from current price
+  
+  # Cancel Conditions
+  cancel_on_atr_spike: true
+  atr_spike_threshold: 1.5  # 1.5x normal ATR
+  cancel_on_deviation: true
+  deviation_threshold: 0.005  # 0.5% price deviation
+
+# Socket Configuration
+socket:
+  host: "localhost"
+  port: 8888
+  buffer_size: 4096
+  reconnect_interval: 5  # seconds
+
+# Logging
+logging:
+  events_file: "logs/realtime_events.csv"
+  predictions_file: "logs/natron_predictions.csv"
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+# Model Inference
+inference:
+  model_path: "models/natron_v6.pt"
+  batch_size: 1
+  sequence_length: 96
+  device: "cuda"  # cuda or cpu
+
+# Safety
+safety:
+  max_daily_trades: 10
+  max_daily_loss: 0.05  # 5% max daily loss
+  emergency_stop: false
