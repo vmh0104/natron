@@ -1,0 +1,75 @@
+Natron End-to-End AI Trading System
+Folder Structure Tree
+=====================================
+
+natron/
+│
+├── __init__.py                          # Package initialization
+├── requirements.txt                     # Python dependencies (pandas, torch, etc.)
+├── README_Natron_EndToEnd.md            # Main documentation & guide
+├── PROJECT_STRUCTURE.md                 # Detailed project structure
+├── EXAMPLES.md                          # Example outputs, logs, configs
+├── FOLDER_STRUCTURE_TREE.txt            # This file
+├── .gitignore                           # Git ignore patterns
+│
+├── Phase 1 - Data Pipeline/
+│   ├── data_pipeline.py                 # Main pipeline orchestrator
+│   ├── feature_engineering.py           # 50-70 technical indicators
+│   └── regime_labeler.py                # 6-class regime labeling
+│
+├── Phase 2 - Model Training/
+│   ├── model_natron.py                  # Multi-head transformer model
+│   ├── dataset_loader.py                # PyTorch Dataset & DataLoader
+│   ├── train_model.py                   # Training script with mixed precision
+│   └── config_train.yaml                # Training configuration
+│
+├── Phase 3 - Evaluation/
+│   ├── evaluate_model.py                # Model evaluation & metrics
+│   └── plot_regime_distribution.py      # Visualization tools
+│
+├── Phase 4 - Realtime Engine/
+│   ├── natron_server_v5.py              # Python trading server
+│   ├── realtime_socket.py               # Socket client for data feed
+│   ├── natron_ea.mq5                    # MetaTrader 5 Expert Advisor
+│   └── realtime_config.yaml             # Realtime configuration
+│
+├── Phase 5 - Feedback Learning/
+│   ├── auto_feedback_engine.py          # Adaptive weight adjustment
+│   ├── log_analyzer.py                  # Trade outcome analysis
+│   └── adaptive_config.yaml             # Adaptive configuration (auto-updated)
+│
+├── Phase 6 - Deployment/
+│   ├── Dockerfile                       # Docker container definition
+│   ├── start_natron.sh                  # Auto-start script (executable)
+│   ├── monitor_natron.py                # System monitoring & alerts
+│   └── monitor_config.yaml              # Monitor configuration
+│
+├── data/                                # Data directory (created at runtime)
+│   ├── raw_data.csv                     # Input OHLCV data (user provides)
+│   └── processed_data.csv               # Processed features (generated)
+│
+├── checkpoints/                         # Model checkpoints (created at runtime)
+│   ├── natron_v6.pt                     # Best trained model
+│   ├── latest.pt                         # Latest checkpoint
+│   └── training_history.json            # Training metrics history
+│
+├── logs/                                 # Logs directory (created at runtime)
+│   └── natron_YYYYMMDD_HHMMSS.log       # Application logs
+│
+└── outputs/                              # Outputs (created at runtime)
+    ├── natron_predictions.csv            # Model predictions on test set
+    ├── metrics_report.json               # Evaluation metrics (accuracy, F1, etc.)
+    ├── regime_distribution.png           # Visualization plots
+    ├── realtime_events.csv               # Trading events log (live trading)
+    └── learning_curve.json              # Learning curve data (feedback)
+
+Total Files: 25 Python scripts + 6 YAML configs + 1 MQL5 EA + Documentation
+
+Key Modules:
+- Data Pipeline: 3 files
+- Model Training: 4 files
+- Evaluation: 2 files
+- Realtime Engine: 4 files
+- Feedback Learning: 3 files
+- Deployment: 4 files
+- Documentation: 4 files

@@ -1,0 +1,21 @@
+# Natron Monitor Configuration
+
+# Logging
+log_dir: "logs"
+event_log_path: "realtime_events.csv"
+
+# Check interval (seconds)
+check_interval: 60
+
+# Telegram alerts (optional)
+telegram_enabled: false
+telegram_bot_token: ""  # Your bot token
+telegram_chat_id: ""     # Your chat ID
+
+# Alert thresholds
+cpu_alert_threshold: 90  # CPU usage %
+memory_alert_threshold: 90  # Memory usage %
+disk_alert_threshold: 90  # Disk usage %
+
+# Daily summary
+daily_summary_time: "18:00"  # UTC time for daily summary

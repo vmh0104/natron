@@ -1,0 +1,43 @@
+# Natron Training Configuration
+
+# Data paths
+data_path: "processed_data.csv"
+output_dir: "checkpoints"
+model_name: "natron_v6.pt"
+
+# Data split
+train_ratio: 0.7
+val_ratio: 0.15
+# test_ratio: 0.15 (remaining)
+
+# Sequence parameters
+sequence_length: 96  # Number of candles per sequence
+forecast_horizon: 5  # Number of candles ahead to forecast
+
+# Model architecture
+d_model: 256
+nhead: 8
+num_layers: 6
+dim_feedforward: 1024
+dropout: 0.1
+num_regime_classes: 6
+num_forecast_classes: 2
+
+# Training hyperparameters
+batch_size: 32
+num_epochs: 100
+learning_rate: 1e-4
+min_lr: 1e-6
+weight_decay: 1e-5
+
+# Loss weights
+regime_weight: 1.0
+context_weight: 0.5
+forecast_weight: 1.0
+
+# Training settings
+use_mixed_precision: true
+num_workers: 4
+
+# GPU settings (auto-detected)
+# device: "cuda"  # or "cpu"

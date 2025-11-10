@@ -1,0 +1,30 @@
+# Natron Adaptive Configuration
+# This file is automatically updated by the feedback learning engine
+
+# Confidence scaling factor
+confidence_scaling: 1.0  # Multiplier for model confidence scores
+
+# Entry threshold
+entry_threshold: 0.6  # Minimum context strength for trade entry
+
+# Regime-specific weights
+regime_weights:
+  BULL_STRONG: 1.0
+  BULL_WEAK: 0.8
+  BEAR_STRONG: 1.0
+  BEAR_WEAK: 0.8
+  RANGE: 0.3
+  VOLATILE: 0.5
+
+# Learning parameters
+learning_rate: 0.1  # How quickly to adapt weights
+min_samples: 50  # Minimum trades before adapting
+
+# Adaptation schedule
+adaptation_frequency: "daily"  # daily, weekly, or after_n_trades
+adaptation_after_trades: 100  # If frequency is after_n_trades
+
+# Performance thresholds
+min_win_rate: 0.45  # Below this, reduce confidence
+target_win_rate: 0.55  # Target win rate
+max_win_rate: 0.70  # Above this, increase selectivity

@@ -1,0 +1,29 @@
+# Natron Realtime Trading Configuration
+
+# Model settings
+model_path: "checkpoints/natron_v6.pt"
+sequence_length: 96
+input_dim: 70  # Number of features (update based on your feature engineering)
+
+# Trading parameters
+symbol: "EURUSD"
+entry_threshold: 0.6  # Minimum context strength for entry
+cancel_threshold: 0.05  # Price deviation threshold for cancellation
+atr_multiplier: 2.0  # ATR multiplier for stop loss
+
+# Socket settings
+socket_host: "localhost"
+socket_port: 8888  # Port for MQL5 EA communication
+
+# Data feed settings
+data_feed_host: "localhost"
+data_feed_port: 9999  # Port for receiving market data
+
+# Logging
+event_log_path: "realtime_events.csv"
+log_level: "INFO"
+
+# Risk management
+max_position_size: 0.1  # Maximum lot size
+max_daily_trades: 10
+max_drawdown_percent: 5.0

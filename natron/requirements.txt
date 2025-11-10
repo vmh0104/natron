@@ -1,0 +1,32 @@
+# Natron AI Trading System - Python Dependencies
+# Version: Natron V1.0 - Galaxy-class
+
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Deep learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Configuration
+pyyaml>=6.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# System monitoring
+psutil>=5.9.0
+
+# HTTP requests (for Telegram alerts)
+requests>=2.31.0
+
+# Optional: MetaTrader 5 Python API (if using MT5 directly)
+# MetaTrader5>=5.0.45
+
+# Development (optional)
+# pytest>=7.4.0
+# black>=23.0.0
+# flake8>=6.0.0
