@@ -1,0 +1,32 @@
+# Natron Transformer Configuration
+
+model:
+  d_model: 128              # Transformer dimension
+  nhead: 8                  # Number of attention heads
+  num_layers: 6             # Number of transformer layers
+  dim_feedforward: 512      # Feedforward dimension
+  dropout: 0.1              # Dropout rate
+  num_features: 100         # Number of input features
+  max_seq_len: 96           # Sequence length
+  freeze_encoder: false     # Freeze encoder during supervised training
+
+training:
+  pretrain_epochs: 10       # Pretraining epochs
+  supervised_epochs: 50     # Supervised training epochs
+  batch_size: 32            # Batch size
+  pretrain_lr: 1e-4         # Pretraining learning rate
+  supervised_lr: 1e-4       # Supervised learning rate
+  weight_decay: 1e-5        # Weight decay
+  patience: 5               # LR scheduler patience
+  device: cuda               # Device (cuda/cpu)
+
+data:
+  sequence_length: 96       # Sequence length
+  train_split: 0.8          # Train/val split ratio
+
+api:
+  host: 0.0.0.0             # API server host
+  port: 5000                # API server port
+  model_path: model/natron_v2.pt
+
+model_path: model/natron_v2.pt
