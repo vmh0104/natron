@@ -1,0 +1,37 @@
+# Natron Transformer Configuration
+
+model:
+  d_model: 256              # Transformer dimension
+  nhead: 8                  # Number of attention heads
+  num_layers: 6             # Number of transformer layers
+  dim_feedforward: 1024     # Feedforward dimension
+  dropout: 0.1              # Dropout rate
+
+training:
+  batch_size: 32            # Batch size
+  learning_rate: 1e-4       # Learning rate
+  weight_decay: 1e-5        # Weight decay
+  pretrain_epochs: 10       # Pretraining epochs
+  supervised_epochs: 50     # Supervised fine-tuning epochs
+  task_weights:             # Multi-task loss weights
+    buy: 1.0
+    sell: 1.0
+    direction: 1.0
+    regime: 1.0
+
+data:
+  sequence_length: 96       # Number of candles per sequence
+  test_size: 0.2            # Test set size
+  val_size: 0.1             # Validation set size
+
+api:
+  host: "0.0.0.0"          # API host
+  port: 5000                # API port
+
+socket:
+  host: "localhost"         # Socket server host
+  port: 8888                # Socket server port
+
+mql5:
+  server_host: "localhost"  # MQL5 server host
+  server_port: 8888         # MQL5 server port
