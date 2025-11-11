@@ -23,7 +23,7 @@ data:
     time_warp_sigma: 0.2
 
 pretraining:
-  enabled: true
+  enabled: false
   objective: masked_contrastive
   epochs: 25
   batch_size: 64
@@ -36,7 +36,7 @@ pretraining:
   grad_clip: 1.0
 
 supervised:
-  enabled: true
+  enabled: false
   epochs: 30
   batch_size: 48
   optimizer:
@@ -58,7 +58,7 @@ loss_weights:
   regime: 1.2
 
 rl:
-  enabled: false
+  enabled: true
   algorithm: ppo
   episodes: 60
   horizon: 256
